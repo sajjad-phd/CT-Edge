@@ -13,7 +13,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 
 1. Clone this repository:
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/sajjad-phd/CT-Edge.git
 cd ct-monitor
 ```
 
