@@ -15,6 +15,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    - Download Raspberry Pi Imager from [raspberrypi.org](https://www.raspberrypi.org/software/)
    - Flash the latest Raspberry Pi OS (64-bit) to your SD card
    - Enable SSH during setup if you want remote access
+   - Set up your username and password during the initial setup
 
 2. First Boot Setup:
    ```bash
@@ -26,7 +27,14 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    sudo apt install -y git python3-pip python3-venv
    ```
 
-3. Create and activate Python virtual environment:
+3. Configure Git (if you haven't already):
+   ```bash
+   # Set your Git username and email
+   git config --global user.name "Your Name"
+   git config --global user.email "your.email@example.com"
+   ```
+
+4. Create and activate Python virtual environment:
    ```bash
    # Create a new directory for the project
    mkdir ~/ct-monitor
@@ -42,15 +50,24 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 ## Installation
 
 1. Clone this repository:
-```bash
-git clone https://github.com/sajjad-phd/CT-Edge.git
-cd ct-monitor
-```
+   ```bash
+   # Make sure you're in the correct directory
+   cd ~/ct-monitor
+   
+   # Clone the repository
+   git clone https://github.com/sajjad-phd/CT-Edge.git
+   
+   # Move into the project directory
+   cd CT-Edge
+   ```
 
 2. Install the required packages:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
+   
+   # Upgrade pip to latest version
+   pip install --upgrade pip
    
    # Install Python dependencies
    pip install -r requirements.txt
@@ -58,7 +75,10 @@ cd ct-monitor
 
 3. Install the MCC118 library:
    ```bash
+   # Update package list
    sudo apt-get update
+   
+   # Install MCC118 library
    sudo apt-get install -y libdaqhats
    ```
 
@@ -68,6 +88,8 @@ cd ct-monitor
    sudo raspi-config
    # Navigate to Interface Options -> I2C -> Yes
    # Navigate to Interface Options -> SPI -> Yes
+   # Reboot after enabling interfaces
+   sudo reboot
    ```
 
 ## Hardware Setup
@@ -80,6 +102,9 @@ cd ct-monitor
    ```bash
    # Check if MCC118 is detected
    dtoverlay -l
+   
+   # Check I2C devices
+   i2cdetect -y 1
    ```
 
 ## Usage
@@ -89,6 +114,10 @@ cd ct-monitor
    # Make sure you're in the virtual environment
    source venv/bin/activate
    
+   # Make sure you're in the project directory
+   cd ~/ct-monitor/CT-Edge
+   
+   # Start the dashboard
    streamlit run dashboard.py
    ```
 
@@ -112,19 +141,46 @@ cd ct-monitor
 
 ## Troubleshooting
 
-1. If MCC118 is not detected:
+1. If Git clone fails:
+   ```bash
+   # Check your internet connection
+   ping github.com
+   
+   # Try cloning with verbose output
+   git clone -v https://github.com/sajjad-phd/CT-Edge.git
+   ```
+
+2. If MCC118 is not detected:
    ```bash
    # Check if the module is properly connected
    ls /dev/i2c*
    ls /dev/spi*
+   
+   # Check I2C bus
+   i2cdetect -y 1
    ```
 
-2. If Python packages fail to install:
+3. If Python packages fail to install:
    ```bash
+   # Make sure you're in the virtual environment
+   source venv/bin/activate
+   
    # Update pip
    pip install --upgrade pip
-   # Try installing packages again
-   pip install -r requirements.txt
+   
+   # Try installing packages one by one
+   pip install streamlit
+   pip install numpy
+   pip install pandas
+   # ... install other required packages
+   ```
+
+4. If you get permission errors:
+   ```bash
+   # Add your user to the i2c and spi groups
+   sudo usermod -a -G i2c,spi $USER
+   
+   # You may need to log out and log back in for changes to take effect
    ```
 
 ## License
