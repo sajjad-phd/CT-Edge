@@ -50,15 +50,27 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 ## Installation
 
 1. Clone this repository:
-```bash
-git clone https://github.com/sajjad-phd/CT-Edge.git
-cd ct-monitor
-```
+   ```bash
+   # Make sure you're in the correct directory
+   cd ~/ct-monitor
+   
+   # Clone the repository
+   git clone https://github.com/sajjad-phd/CT-Edge.git
+   
+   # Move into the project directory
+   cd CT-Edge
+   ```
 
 2. Install the required packages:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
+   
+   # Make sure you're in the CT-Edge directory
+   pwd  # Should show /home/pi/ct-monitor/CT-Edge
+   
+   # Verify requirements.txt exists
+   ls requirements.txt
    
    # Upgrade pip to latest version
    pip install --upgrade pip
@@ -144,7 +156,22 @@ cd ct-monitor
    git clone -v https://github.com/sajjad-phd/CT-Edge.git
    ```
 
-2. If MCC118 is not detected:
+2. If requirements.txt is not found:
+   ```bash
+   # Check current directory
+   pwd
+   
+   # List files in current directory
+   ls -la
+   
+   # If you're not in the right directory, navigate to it
+   cd ~/ct-monitor/CT-Edge
+   
+   # Verify requirements.txt exists
+   ls requirements.txt
+   ```
+
+3. If MCC118 is not detected:
    ```bash
    # Check if the module is properly connected
    ls /dev/i2c*
@@ -154,7 +181,7 @@ cd ct-monitor
    i2cdetect -y 1
    ```
 
-3. If Python packages fail to install:
+4. If Python packages fail to install:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
@@ -169,7 +196,7 @@ cd ct-monitor
    # ... install other required packages
    ```
 
-4. If you get permission errors:
+5. If you get permission errors:
    ```bash
    # Add your user to the i2c and spi groups
    sudo usermod -a -G i2c,spi $USER
