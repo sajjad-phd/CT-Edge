@@ -61,13 +61,22 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    cd CT-Edge
    ```
 
-2. Install the required packages:
+2. Install the MCC118 library first:
+   ```bash
+   # Update package list
+   sudo apt-get update
+   
+   # Install MCC118 library and Python bindings
+   sudo apt-get install -y libdaqhats python3-daqhats
+   ```
+
+3. Install the required Python packages:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
    
    # Make sure you're in the CT-Edge directory
-   pwd  # Should show /home/pi/ct-monitor/CT-Edge
+   pwd  # Should show /home/aiog/ct-monitor/CT-Edge
    
    # Verify requirements.txt exists
    ls requirements.txt
@@ -75,17 +84,8 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    # Upgrade pip to latest version
    pip install --upgrade pip
    
-   # Install Python dependencies
-   pip install -r requirements.txt
-   ```
-
-3. Install the MCC118 library:
-   ```bash
-   # Update package list
-   sudo apt-get update
-   
-   # Install MCC118 library
-   sudo apt-get install -y libdaqhats
+   # Install Python dependencies (excluding mcc118 as it's installed via apt)
+   pip install streamlit numpy pandas matplotlib
    ```
 
 4. Configure I2C and SPI interfaces:
@@ -193,7 +193,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    pip install streamlit
    pip install numpy
    pip install pandas
-   # ... install other required packages
+   pip install matplotlib
    ```
 
 5. If you get permission errors:
