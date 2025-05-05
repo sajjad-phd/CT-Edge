@@ -42,10 +42,10 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 ## Installation
 
 1. Clone this repository:
-   ```bash
-   git clone <your-repository-url>
-   cd ct-monitor
-   ```
+```bash
+git clone <your-repository-url>
+cd ct-monitor
+```
 
 2. Install the required packages:
    ```bash
