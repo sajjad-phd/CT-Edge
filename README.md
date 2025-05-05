@@ -24,7 +24,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    sudo apt upgrade -y
    
    # Install essential tools
-   sudo apt install -y git python3-pip python3-venv
+   sudo apt install -y git python3-pip python3-venv build-essential
    ```
 
 3. Configure Git (if you haven't already):
@@ -34,7 +34,47 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    git config --global user.email "your.email@example.com"
    ```
 
-4. Create and activate Python virtual environment:
+4. Install MCC118 DAQ HAT Library:
+   ```bash
+   # Clone the MCC DAQ HAT library repository
+   git clone https://github.com/mccdaq/daqhats.git
+   cd daqhats
+   
+   # Install the library
+   sudo ./install.sh
+   
+   # Return to home directory
+   cd ~
+   ```
+
+5. Configure I2C and SPI interfaces:
+   ```bash
+   # Enable I2C and SPI
+   sudo raspi-config
+   # Navigate to Interface Options -> I2C -> Yes
+   # Navigate to Interface Options -> SPI -> Yes
+   
+   # Add MCC118 overlay to config.txt
+   echo "dtoverlay=mcc118" | sudo tee -a /boot/config.txt
+   
+   # Reboot to apply changes
+   sudo reboot
+   ```
+
+6. Verify MCC118 Installation:
+   ```bash
+   # After reboot, test MCC118 detection
+   mcc118_test
+   
+   # Or test with Python
+   python3
+   >>> from daqhats import hat_list, HatIDs
+   >>> hats = hat_list()
+   >>> for hat in hats:
+   ...     print(hat)
+   ```
+
+7. Create and activate Python virtual environment:
    ```bash
    # Create a new directory for the project
    mkdir ~/ct-monitor
@@ -61,16 +101,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    cd CT-Edge
    ```
 
-2. Install the MCC118 library first:
-   ```bash
-   # Update package list
-   sudo apt-get update
-   
-   # Install MCC118 library and Python bindings
-   sudo apt-get install -y libdaqhats python3-daqhats
-   ```
-
-3. Install the required Python packages:
+2. Install the required Python packages:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
@@ -84,18 +115,8 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    # Upgrade pip to latest version
    pip install --upgrade pip
    
-   # Install Python dependencies (excluding mcc118 as it's installed via apt)
+   # Install Python dependencies
    pip install streamlit numpy pandas matplotlib
-   ```
-
-4. Configure I2C and SPI interfaces:
-   ```bash
-   # Enable I2C and SPI
-   sudo raspi-config
-   # Navigate to Interface Options -> I2C -> Yes
-   # Navigate to Interface Options -> SPI -> Yes
-   # Reboot after enabling interfaces
-   sudo reboot
    ```
 
 ## Hardware Setup
@@ -111,6 +132,9 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    
    # Check I2C devices
    i2cdetect -y 1
+   
+   # Check HAT devices
+   ls /proc/device-tree/hat/
    ```
 
 ## Usage
@@ -147,31 +171,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 
 ## Troubleshooting
 
-1. If Git clone fails:
-   ```bash
-   # Check your internet connection
-   ping github.com
-   
-   # Try cloning with verbose output
-   git clone -v https://github.com/sajjad-phd/CT-Edge.git
-   ```
-
-2. If requirements.txt is not found:
-   ```bash
-   # Check current directory
-   pwd
-   
-   # List files in current directory
-   ls -la
-   
-   # If you're not in the right directory, navigate to it
-   cd ~/ct-monitor/CT-Edge
-   
-   # Verify requirements.txt exists
-   ls requirements.txt
-   ```
-
-3. If MCC118 is not detected:
+1. If MCC118 is not detected:
    ```bash
    # Check if the module is properly connected
    ls /dev/i2c*
@@ -179,9 +179,19 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    
    # Check I2C bus
    i2cdetect -y 1
+   
+   # Check HAT devices
+   ls /proc/device-tree/hat/
+   
+   # Test MCC118 with Python
+   python3
+   >>> from daqhats import hat_list, HatIDs
+   >>> hats = hat_list()
+   >>> for hat in hats:
+   ...     print(hat)
    ```
 
-4. If Python packages fail to install:
+2. If Python packages fail to install:
    ```bash
    # Make sure you're in the virtual environment
    source venv/bin/activate
@@ -196,7 +206,7 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
    pip install matplotlib
    ```
 
-5. If you get permission errors:
+3. If you get permission errors:
    ```bash
    # Add your user to the i2c and spi groups
    sudo usermod -a -G i2c,spi $USER
