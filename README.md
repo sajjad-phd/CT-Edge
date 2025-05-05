@@ -50,16 +50,10 @@ A real-time monitoring system for Current Transformer (CT) data using MCC118 DAQ
 ## Installation
 
 1. Clone this repository:
-   ```bash
-   # Make sure you're in the correct directory
-   cd ~/ct-monitor
-   
-   # Clone the repository
-   git clone https://github.com/sajjad-phd/CT-Edge.git
-   
-   # Move into the project directory
-   cd CT-Edge
-   ```
+```bash
+git clone https://github.com/sajjad-phd/CT-Edge.git
+cd ct-monitor
+```
 
 2. Install the required packages:
    ```bash
